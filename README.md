@@ -1,9 +1,11 @@
 # pcelar
 Program za pozicioniranje košnica i vođenje dnevnika stanja košnice
 
-<img src="setup/icon.png" width="100px" height="100px">
-<img src="img/hive_top.png" width="100px" height="100px">
-<img src="img/hive.png" width="100px" height="100px">
+<div style="display:flex;">
+  <img src="setup/icon.png" width="100px" height="100px">
+  <img src="img/hive_top.png" width="100px" height="100px">
+  <img src="img/hive.png" width="100px" height="100px">
+</div>
 
 <pre>
      program : Ovaj program je namenjen za vođenje evidencije stanja i planiranja postavke košnica

@@ -309,14 +309,6 @@ footer{
   bottom: -11%;
 }
 
-/* @media(max-width: 766px){
-  textarea{
-  }
-  .cell-data{
-
-  }
-} */
-
 .hexagon-shape{
   clip-path: polygon(0 25%,50% 0,100% 25%,100% 75%,50% 100%,0 75%);
 }
@@ -329,7 +321,6 @@ footer{
   animation: slideFromRight .33s;
   border-radius: 3px;
 }
-
 
 /* landscape */
 @media (orientation: landscape) {
@@ -346,4 +337,17 @@ footer{
        font-size: 12vh;
        line-height: inherit;
     }
+}
+
+
+/* SMALLER SCREEN TOUCHSCREENS */
+@media screen and (max-height: 668px){
+     .mid-circle{
+       line-height: normal;
+       max-height: 100px;
+       max-width: 100px;
+
+     }
+
+
 }

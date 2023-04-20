@@ -1,6 +1,8 @@
 # pcelar
 Program za pozicioniranje košnica i vođenje dnevnika stanja košnice
 
+<img src="setup/icon.png" width="100px" height="100px">
+
 <pre>
      program : Ovaj program je namenjen za vođenje evidencije stanja i planiranja postavke košnica
                     Prvi ekran je početni ekran koji beleži statistiku i navodi nas ka ostalim delovima programa

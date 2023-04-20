@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="no-scrollbar"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, height=device-height">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link href="../PUBLIC/css/cloak.css"  rel="preload" as="style" onload="this.rel='stylesheet'" >
+<link href="style.css"      rel="preload" as="style" onload="this.rel='stylesheet'" >
+<!-- <link rel="stylesheet" href="print.css" type="text/css" media="print" /> -->
+<link rel="icon" type="image/png" href="img/hive_top.png">
+<!-- <link rel="apple-touch-icon" sizes="180x180" href="favi/apple-touch-icon.png"> -->
+    <!-- <link rel="icon" type="image/png" href="favi/mstile-70x70.png">
+    <link rel="manifest" href="favi/site.webmanifest">
+    <meta name="msapplication-TileColor" content="#00aba9">
+    <meta name="theme-color" content="#ffffff"> -->
+<title>P-C-E-L-A-R</title>
+</head>
+<body>
+<div class="big-container no-scrollbar no-selection no-overflow-app">
+
+  <div class="top">
+        <div class="back --button" title="NAZAD">↰</div>
+        <div class="empty"></div>
+  </div>
+
+  <div class="container">
+
+   <div class="mid-side">
+       <div class="empty"></div>
+       <div class="manual --button" title="UPUTSTVO">?</div>
+    </div>
+    <div class="mid">
+            <div class="mid-circle --big-button" title="KONTROLA KOŠNICA">0</div>
+    </div>
+    <div class="bottom">
+            <div class="diary --button"    title="DNEVNIK">⬣</div>
+            <div class="triangle --button" title="OSTALO">△</div>
+    </div>
+  </div>
+
+  <div class="diary-container">
+     <h2>DNEVNIK:</h2>
+     <table class="diary-table">
+       <thead>
+          <th>Redni Broj</th>
+          <th>Uočeno</th>
+          <th>Pozicija</th>
+       </thead>
+       <tbody>
+
+       </tbody>
+     </table>
+  </div>
+  <div class="table-container"></div>
+  <div class="settings-container">
+     <h2>OSTALO:</h2>
+      <ul class="settings-list">
+        <li>
+           <span>EXPORT</span> <input type="button" class="export --button" name="" value="⇥" title="EXPORT" />
+         </li>
+         <li>
+           <form>
+               <input type="file" hidden id="readFile" class="" name="" value="" accept="text/plain, text/csv" />
+               <input type="button" class="import --button" name="" value="⇤" title="IMPORT" />
+             </form>
+           <span>IMPORT</span>
+         </li>
+      </ul>
+   </div>
+  <div class="help-container">
+     <h2>UPUTSTVO:</h2>
+  </div>
+
+<div class="restovi">
+  <div class="cell-menu">
+       <input type="button" class="delete-cell micro-btn --red" name="" value="x" title="OBRIŠI" />
+       <input type="button" class="edit-cell micro-btn --green" name="" value="e" title="EDITUJ" />
+  </div>
+  <div class="cell-data">
+       <span>Dnevnik:</span>
+       <textarea name="cell-text" rows="10" cols="30" class="cell-text"></textarea>
+  </div>
+ </div>
+</div><!--end of big-container-->
+
+<footer></footer>
+<script src="help.js"></script>
+<script src="app.js" async></script>
+
+</body>
+</html>

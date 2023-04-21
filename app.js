@@ -33,6 +33,11 @@ const $$ = {
     CELL : null,
     DATA : ``,
     HOLD_START : 0,
+    moving : {
+      state : false,
+      from  : null,
+      to    : null
+    }
   },
   query : {},
   collectQuery : function(){
@@ -248,8 +253,10 @@ const $$ = {
                let data = hives[i].getAttribute('data');
                if(input.value.length < 1 ) { hives[i].style.outline = ''; continue; }
 
-               if( data != null && data.search(input.value) > -1) hives[i].style.outline = '2px solid var(--macRed)';
-               else                                               hives[i].style.outline = '';
+               let reg = new RegExp(input.value, 'gi');
+
+               if( data != null && data.search(reg) > -1) hives[i].style.outline = '2px solid var(--macRed)';
+               else                                       hives[i].style.outline = '';
              }
            });
 
@@ -264,9 +271,11 @@ const $$ = {
 
         switch(target.classList[1] == 'hive'){
           case false:
+                    if($$.vars.moving.state) return false;
                      target.classList.add('hive');
           break;
           case true:
+                    if($$.vars.moving.state) return false;
                     $$.vars.CELL = e.target;
                     $$.cellMenu(e);
           break;
@@ -326,18 +335,18 @@ const $$ = {
   escapeNewLine : (data)=> data.replaceAll('\n', '&#10;'),
 
   cellMenu : function(e){
-      let cellMenu = qu('.cell-menu');
-      show_this(cellMenu, 'block');
-      let rect = e.target.getBoundingClientRect();
-      cellMenu.style.left = rect.left-5 + 'px';
-      cellMenu.style.top  = rect.top-35 + 'px';
+        let cellMenu = qu('.cell-menu');
+        show_this(cellMenu, 'block');
+        let rect = e.target.getBoundingClientRect();
+        cellMenu.style.left = rect.left-35 + 'px';
+        cellMenu.style.top  = rect.top-35 + 'px';
 
-      if($$.vars.CELL && $$.vars.CELL.getAttribute('data') != null){
-          show_this( qu('.cell-data'), 'block' );
-          $$.query.cellText.value = $$.readBackData( $$.vars.CELL.getAttribute('data') );
-      }else{
-          show_this( qu('.cell-data'), 'none' );
-      }
+        if($$.vars.CELL && $$.vars.CELL.getAttribute('data') != null){
+            show_this( qu('.cell-data'), 'block' );
+            $$.query.cellText.value = $$.readBackData( $$.vars.CELL.getAttribute('data') );
+        }else{
+            show_this( qu('.cell-data'), 'none' );
+        }
 
   },
   createHelpTable : function(){
@@ -432,8 +441,75 @@ const $$ = {
       setTimeout(hide, disappear) //FADE OUT EFFECT
       setTimeout( t=> pop.remove(), disappear + 300) //REMOVE OLD POP
   },
+  // ONE TIME EVENT
+  cellMoving : function(){
+      $$.vars.moving.state = true;
+      $$.vars.moving.from = $$.vars.CELL;
 
+      function captureTarget(e){
+         if(e.target.classList.contains('cell') && e.target.classList.contains('hive') == false){
+            $$.vars.moving.to = e.target;
 
+            qu('.bee-control-table').removeEventListener('click', captureTarget); //strip event
+            $$.vars.moving.to.setAttribute('data', $$.vars.moving.from.getAttribute('data') ); //swap data
+            $$.vars.moving.to.classList.add('hive'); //set new as hive
+            $$.vars.moving.from.removeAttribute('data'); //REMOVE OLD
+            $$.vars.moving.from.classList.remove('hive', 'move-shake'); //turn off old hive
+
+            $$.vars.moving.from  = null;
+            $$.vars.moving.to    = null;
+            $$.vars.moving.state = false;
+         }
+      }
+      qu('.bee-control-table').addEventListener('click', captureTarget);
+  },
+  //DETERMINE NORTH
+  createGeoDots : function(){
+        let container = qu('.table-container');
+        let div = dce('div');
+            div.classList.add('compass');
+
+        for(let i = 0; i< 4; i++){
+            let dot = dce('div');
+            dot.classList.add('geo');
+            dot.setAttribute('index', i);
+
+            dot.addEventListener('click', e=>{
+               $$.stripAll(quAll('.geo'), 'north');
+               e.target.classList.add('north');
+               switch(dot.getAttribute('index')){
+                 case "0":   needle.style.transform = "rotate(0deg)";     break;
+                 case "1":   needle.style.transform = "rotate(-90deg)";   break;
+                 case "2":   needle.style.transform = "rotate(90deg)";    break;
+                 case "3":   needle.style.transform = "rotate(180deg)";   break;
+               }
+             });
+            div.appendChild(dot);
+        }
+
+        let needle = dce('div');
+            needle.classList.add('needle', 'dead-centar');
+              div.appendChild(needle);
+              qu('.table-container').appendChild(div);
+
+  },
+  stripAll : function(elements, it ){
+     for(let i = 0;i< elements.length;i++){
+         elements[i].classList.remove(it);
+     }
+  },
+  changeGeoDots : function(){
+        let size= qu('.geo').clientWidth;
+        let Xpositions = [window.innerWidth/2 - size/2, 0, window.innerWidth-size, window.innerWidth/2- size/2 ];
+        let Ypositions = [50, window.innerHeight/2-size/2, window.innerHeight/2-size/2, (window.innerHeight/3)*2.5 ];
+
+        let dots = quAll('.geo');
+
+        for(let i = 0;i<dots.length;i++){
+            dots[i].style.left = Xpositions[i] + 'px';
+            dots[i].style.top  = Ypositions[i] + 'px';
+        }
+  }
 
 
 }
@@ -447,8 +523,13 @@ const main = function(){
       $$.checkStorage();
       $$.countCells();
       $$.createSearch();
+      $$.createGeoDots();
 
-      qu('.mid-circle').addEventListener('click', e=>  $$.showSpecificContainer( qu('.table-container') ) );
+
+      qu('.mid-circle').addEventListener('click', e=>  {
+        $$.showSpecificContainer( qu('.table-container') );
+        setTimeout( t=> $$.changeGeoDots(), .3* 1000);
+      });
       qu('.triangle').addEventListener('click', e=>  $$.showSpecificContainer( qu('.settings-container') ) );
       qu('.manual').addEventListener('click', e=>  $$.showSpecificContainer( qu('.help-container') ) );
       qu('.diary').addEventListener('click', e=>  {
@@ -484,6 +565,11 @@ const main = function(){
           show_this( qu('.cell-data'), 'block' );
           $$.query.cellText.value = ''; //RESET OLD
       });
+      //MOVE CELL
+      qu('.move-cell').addEventListener('click', e=> {
+         $$.cellMoving();
+         $$.vars.CELL.classList.add('move-shake');
+       });
      //INPUTED TEXT IS AUTO ATTACHED TO CELL DATA
       $$.query.cellText.addEventListener('keyup', e=> $$.vars.CELL.setAttribute('data', e.target.value) );
      //EXPORT

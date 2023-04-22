@@ -26,7 +26,6 @@ const doc   = document,
       unpack = (str, rule)=> (isIterable(str)) ? [...str.toString().split(rule)] : '',
       getAllProperties = (thing, props = [] ) => thing.__proto__ ? getAllProperties(thing.__proto__, props.concat( Object.getOwnPropertyNames(thing)) ) : [...new Set(props.concat(  Object.getOwnPropertyNames(thing) ))];
 
-
 const $$ = {
   vars  : {
     zoom_val : 1,
@@ -381,7 +380,8 @@ const $$ = {
              let td1 = dce('td');
                  td1.innerText = i+1;
              let td2 = dce('td');
-                 td2.innerText =  $$.readBackData( allCells[i].getAttribute('data') );
+                let data = allCells[i].getAttribute('data');
+                 td2.innerText = (data != null ) ? $$.readBackData(data) : '';
                  let pos_arr = $$.findPosition(allCells[i]);
              let td3 = dce('td');
                  if(pos_arr != null) td3.innerText = `Red:${pos_arr[0]+1 || 0} Kolona:${pos_arr[1]+1 || 0}`;
@@ -419,7 +419,6 @@ const $$ = {
                     let _type= newFile.name;
                     $$.vars.DATA = reader.result;
                     await $$.fillData();
-                    // await log(reader.result);
                    file.value = ""; //CLEAN AFTER YOURSELF
                 });
              }
@@ -511,7 +510,6 @@ const $$ = {
         }
   }
 
-
 }
 
 
@@ -525,10 +523,9 @@ const main = function(){
       $$.createSearch();
       $$.createGeoDots();
 
-
       qu('.mid-circle').addEventListener('click', e=>  {
-        $$.showSpecificContainer( qu('.table-container') );
-        setTimeout( t=> $$.changeGeoDots(), .3* 1000);
+         $$.showSpecificContainer( qu('.table-container') );
+         setTimeout( t=> $$.changeGeoDots(), .3* 1000);
       });
       qu('.triangle').addEventListener('click', e=>  $$.showSpecificContainer( qu('.settings-container') ) );
       qu('.manual').addEventListener('click', e=>  $$.showSpecificContainer( qu('.help-container') ) );
